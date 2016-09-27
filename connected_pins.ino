@@ -1,15 +1,31 @@
+#include <Arduino.h>
+
 #include <Adafruit_NeoPixel.h>
+#include <ESP8266WiFi.h>
 #include <math.h>
+
+#include <ESP8266WiFi.h>
+#include <ESP8266WiFiMulti.h>
+#include <WebSocketsClient.h>
+#include <Hash.h>
 
 #define DEBUG
 //#define MODE_RAINBOW 1000
-#define MODE_SERIAL
+//#define MODE_SERIAL
+#define MODE_CONNECTED
+
+#define SSID "yourssid"
+#define SSIDPASS "yourssidpassword"
+#define SSOCKETURL "shrouded-bayou-62366.herokuapp.com"
 
 #define FREQ 1             // Number of blink(s) during BLINK_TIME
 #define BLINK_TIME 2       // Total blinking time
 #define MAXBRIGHTNESS 255  // 0 to 255, overall brigthness of the leds
-#define PIN 12
-#define NUM_PIX 1
+#define PIN 12             // Pin number of the NeoPixel bus
+#define NUM_PIX 1          // Number of NoePixel leds
+
+ESP8266WiFiMulti WiFiMulti;
+WebSocketsClient webSocket;
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIX, PIN, NEO_GRB + NEO_KHZ800);
 uint8_t current_color[] = {0, 0, 255};
@@ -18,6 +34,28 @@ unsigned long start_color_time = 0;
 void setup() {
   Serial.begin(115200);
 
+  #ifdef MODE_CONNECTED
+  //Serial.setDebugOutput(true);
+  Serial.setDebugOutput(true);
+  Serial.println();
+
+  for(uint8_t t = 4; t > 0; t--) {
+    Serial.printf("[SETUP] BOOT WAIT %d...\n", t);
+    Serial.flush();
+    delay(1000);
+  }
+
+  WiFiMulti.addAP(SSID, SSIDPASS);
+
+  //WiFi.disconnect();
+  while(WiFiMulti.run() != WL_CONNECTED) {
+    delay(100);
+  }
+
+  webSocket.beginSSL(SSOCKETURL, 443);
+  webSocket.onEvent(webSocketEvent);
+  #endif
+  
   strip.begin();
   strip.setBrightness(MAXBRIGHTNESS);
   set_color(current_color);
@@ -30,6 +68,10 @@ void setup() {
 void loop() {
   #ifdef MODE_SERIAL
   set_color_from_serial();
+  #endif
+
+  #ifdef MODE_CONNECTED
+  webSocket.loop();
   #endif
 
   // Redraw pixels
@@ -140,3 +182,41 @@ void rainbow_demo() {
   delay(500);
 }
 #endif
+
+void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
+    String str;
+    switch(type) {
+        case WStype_DISCONNECTED:
+            Serial.printf("[WSc] Disconnected!\n");
+            break;
+        case WStype_CONNECTED:
+            {
+                Serial.printf("[WSc] Connected to url: %s\n",  payload);
+                webSocket.sendTXT("Connected"); // Say hello to server when connected
+            }
+            break;
+        case WStype_TEXT:
+            Serial.printf("[WSc] get text: %s\n", payload);
+            str = (char*)payload;
+            if (str.substring(2,7).equals("color")) {
+              // TODO: This can be surely be done better ;-)
+              uint8_t pos1, pos2;
+              uint8_t r, g, b;
+              pos1 = str.indexOf('[');
+              pos2 = str.indexOf(',');
+              r = str.substring(pos1+1, pos2).toInt();
+              pos1 = pos2;
+              pos2 = str.indexOf(',', pos1+1);
+              g = str.substring(pos1+1, pos2).toInt();
+              pos1 = pos2;
+              pos2 = str.indexOf(']', pos1+1);
+              b = str.substring(pos1+1, pos2).toInt();
+              set_color(r,g,b);
+            }
+            break;
+        case WStype_BIN:
+            Serial.printf("[WSc] get binary length: %u\n", length);
+            hexdump(payload, length);
+            break;
+    }
+}
