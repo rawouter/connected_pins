@@ -10,7 +10,6 @@
 #include <Hash.h>
 
 #define DEBUG
-//#define MODE_RAINBOW 1000
 //#define MODE_SERIAL
 #define MODE_CONNECTED
 
@@ -60,9 +59,6 @@ void setup() {
   strip.setBrightness(MAXBRIGHTNESS);
   set_color(current_color);
   strip.show(); // Initial blip
-#ifdef MODE_RAINBOW
-  rainbow_demo();
-#endif
 }
 
 void loop() {
@@ -150,36 +146,6 @@ void set_color_from_serial() {
       case 'w': set_color(255,255,255); break;
     }
   }
-}
-#endif
-
-#ifdef MODE_RAINBOW
-void rainbow_demo() {
-  const int DELAY = MODE_RAINBOW;
-  set_color(255,51,153); // emergency
-  strip.show();
-  delay(DELAY);
-  set_color(255,0,0); // alert
-  strip.show();
-  delay(DELAY);
-  set_color(255,80,80); // critical
-  strip.show();
-  delay(DELAY);
-  set_color(255,153,51); // error
-  strip.show();
-  delay(DELAY);
-  set_color(255,255,0); // warning
-  strip.show();
-  delay(DELAY);
-  set_color(51,153,255); // notice
-  strip.show();
-  delay(DELAY);
-  set_color(111,252,182); // info
-  strip.show();
-  delay(DELAY);
-  set_color(162,250,150); // debug
-  strip.show();
-  delay(500);
 }
 #endif
 
