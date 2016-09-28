@@ -9,22 +9,24 @@
 #include <WebSocketsClient.h>
 #include <Hash.h>
 
-#define DEBUG
+//#define DEBUG
 //#define MODE_SERIAL
 #define MODE_CONNECTED
 
-#define SSID "yourssid"
-#define SSIDPASS "yourssidpassword"
+#define SSID "xxx"
+#define SSIDPASS "xxx"
 #define SSOCKETURL "shrouded-bayou-62366.herokuapp.com"
 
 #define FREQ 1             // Number of blink(s) during BLINK_TIME
-#define BLINK_TIME 2       // Total blinking time
+#define BLINK_TIME 1       // Total ligthning time per color message (seconds)
 #define MAXBRIGHTNESS 255  // 0 to 255, overall brigthness of the leds
 #define PIN 12             // Pin number of the NeoPixel bus
 #define NUM_PIX 1          // Number of NoePixel leds
 
+#ifdef MODE_CONNECTED
 ESP8266WiFiMulti WiFiMulti;
 WebSocketsClient webSocket;
+#endif
 
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIX, PIN, NEO_GRB + NEO_KHZ800);
 uint8_t current_color[] = {0, 0, 255};
@@ -32,10 +34,11 @@ unsigned long start_color_time = 0;
 
 void setup() {
   Serial.begin(115200);
+  pinMode(0, OUTPUT); digitalWrite(0, HIGH);
+  pinMode(2, OUTPUT); digitalWrite(2, HIGH);
 
   #ifdef MODE_CONNECTED
-  //Serial.setDebugOutput(true);
-  Serial.setDebugOutput(true);
+  Serial.setDebugOutput(true);  // Will print WIFI debugs
   Serial.println();
 
   for(uint8_t t = 4; t > 0; t--) {
@@ -54,7 +57,7 @@ void setup() {
   webSocket.beginSSL(SSOCKETURL, 443);
   webSocket.onEvent(webSocketEvent);
   #endif
-  
+
   strip.begin();
   strip.setBrightness(MAXBRIGHTNESS);
   set_color(current_color);
@@ -80,6 +83,9 @@ void set_color(uint8_t r, uint8_t g, uint8_t b) {
   set_color(c);
 }
 
+/*
+ * Record the start time and the new color to reach
+ */
 void set_color(uint8_t c[3]) {
   #ifdef DEBUG
   Serial.print("Setting color: ");
@@ -87,7 +93,7 @@ void set_color(uint8_t c[3]) {
   Serial.print(c[1]);
   Serial.println(c[2]);
   #endif
-  
+
   start_color_time = millis();
   current_color[0] = c[0];
   current_color[1] = c[1];
@@ -96,39 +102,36 @@ void set_color(uint8_t c[3]) {
 
 void draw_pixels() {
   uint8_t c[3] = {0,0,0};
-  float brightness = 255 - get_brightness();
-  if (brightness>0 && brightness<1) {
-    brightness = 1.0;
-  }
-  if ((0 < brightness) && (brightness < 255)) {
-    c[0] = current_color[0] / brightness;
-    c[1] = current_color[1] / brightness;
-    c[2] = current_color[2] / brightness;
+  uint8_t brightness = (uint8_t)get_brightness();
 
-    #ifdef DEBUG
-    Serial.print("Brightness (inverted): ");
-    Serial.println(brightness);
-    Serial.print("Resulting color: ");
-    Serial.print(c[0]);
-    Serial.print(c[1]);
-    Serial.println(c[2]);
-    #endif
+  c[0] = map(current_color[0], 0, 255, 0, brightness);
+  c[1] = map(current_color[1], 0, 255, 0, brightness);
+  c[2] = map(current_color[2], 0, 255, 0, brightness);
+
+  #ifdef DEBUG
+  if (brightness > 0) {
+    Serial.printf("Brightness: %i\n", brightness);
+    Serial.printf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);    
   }
- 
+  #endif
+
   for(uint16_t i=0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c[0], c[1], c[2]);
   }
 }
 
-float get_brightness() {
-  float res;
-  unsigned long now = millis() - start_color_time;
-  if (now > (BLINK_TIME*1000)) {
-    res = 0;
+uint8_t get_brightness() {
+  uint8_t brightness;
+  float now = (millis() - start_color_time) / 1000.0; // Seconds
+  if (now > BLINK_TIME) {
+    digitalWrite(0, HIGH);
+    brightness = 0;
   } else {
-    res = sin(now/1000.0*FREQ) * 255;
+    digitalWrite(0, HIGH*0.8);
+    //brightness = (uint8_t)abs(sin(now*PI/BLINK_TIME*FREQ) * 255);
+    brightness = (uint8_t)((exp(sin((now*2*PI/BLINK_TIME*FREQ)-PI/2.0)) - 0.36787944)*108.0);
   }
-  return res;
+  return brightness;
 }
 
 #ifdef MODE_SERIAL
@@ -149,8 +152,10 @@ void set_color_from_serial() {
 }
 #endif
 
+#ifdef MODE_CONNECTED
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
     String str;
+    digitalWrite(2, HIGH*0.8);
     switch(type) {
         case WStype_DISCONNECTED:
             Serial.printf("[WSc] Disconnected!\n");
@@ -162,7 +167,9 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
             }
             break;
         case WStype_TEXT:
+            #ifdef DEBUG
             Serial.printf("[WSc] get text: %s\n", payload);
+            #endif
             str = (char*)payload;
             if (str.substring(2,7).equals("color")) {
               // TODO: This can be surely be done better ;-)
@@ -181,8 +188,12 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
             }
             break;
         case WStype_BIN:
+            #ifdef DEBUG
             Serial.printf("[WSc] get binary length: %u\n", length);
+            #endif
             hexdump(payload, length);
             break;
     }
+    digitalWrite(2, HIGH);
 }
+#endif
