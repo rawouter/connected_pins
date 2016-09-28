@@ -1,7 +1,7 @@
 # Connected pins
 
 Connected pins, is an IOT project.
-This project control a NeoPixel led using ESP2866 Huzzah connected to a remote 3rd party websocket, the websocket simply send the RGB value of the led, that will in turn blink once with the value read.
+This project control a NeoPixel led using ESP8266 Huzzah connected to a remote 3rd party websocket, the websocket simply send the RGB value of the led, that will in turn blink once with the value read.
 
 ## Usage
 
@@ -36,6 +36,17 @@ Note: I renamed the installed directory in '~/Documents/Arduino/Libraries' to re
 
 Install the [NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel), see project README.
 
+## Tested hardware listing:
+
+- [Huzzah Feather](http://www.exp-tech.de/en/adafruit-feather-huzzah-with-esp8266-wifi?___from_store=de)
+- [Lipo 1000mAh](http://www.exp-tech.de/en/polymer-lithium-ion-battery-1000mah)
+- [Adafruit NeoPixel](http://www.exp-tech.de/adafruit-flora-rgb-smart-neo-pixel-version-2-pack-of-4)
+
+## Battery life
+
+First results without optimisation indicates that the 1000mAh battery should last at least 10 hours (but for sure not more than 15h).
+Given the above result, the sketch will probably not try to put the board to sleep.
+
 ## Hardware connection
 
 Connect the led UP ARROW port to Huzzah PIN 12.
@@ -48,7 +59,7 @@ Connect the led (-) to Huzzah GND.
 Connect the led (+) to Huzzah VCC (see below note for Huzzah Feather)
   - Note: connecting to the 3.3V regulator works but the blue led will be very dimm, giving fake colors, and less overall brightness
   - Note: On the Huzzah Feather there is a specific port giving the LIPO direct power named BAT, this is the one you should use for mobile led pins project.
-  - As written above, if you use your other esp2866 with your own power regulator, the direct power from a 1S LIPO gives good results with the Adaftruit Neopixel
+  - As written above, if you use your other esp8266 with your own power regulator, the direct power from a 1S LIPO gives good results with the Adaftruit Neopixel
 
 ![Connect led to pin 12](https://github.com/rawouter/connected_pins/blob/master/schema/wiring.png)
 
