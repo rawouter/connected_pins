@@ -41,8 +41,10 @@ Install the [NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel), see proje
 Connect the led UP ARROW port to Huzzah PIN 12.
   - Note: There are two _arrows pins_ on the led PCB, do not use the arrow going form the led to the pin, but the one from the pin to the led)
   - Note: You can use any other GPIO ports on the board, but don't forget to change the PIN number in the sketch
+
 Connect the led (-) to Huzzah GND.
   - Note: There is only one GND port on my board, if you want to connect more hardware to the board you may want to not solder the wire directly.
+
 Connect the led (+) to Huzzah VCC (see below note for Huzzah Feather)
   - Note: connecting to the 3.3V regulator works but the blue led will be very dimm, giving fake colors, and less overall brightness
   - Note: On the Huzzah Feather there is a specific port giving the LIPO direct power named BAT, this is the one you should use for mobile led pins project.
