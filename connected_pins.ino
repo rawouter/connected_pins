@@ -139,14 +139,15 @@ void set_color_from_serial() {
   if (Serial.available() > 0) {
     char c = Serial.read();
     switch(c) {
-      case 'o': set_color(0,0,0); break;
-      case 'r': set_color(255,0,0); break;
-      case 'g': set_color(0,255,0); break;
-      case 'b': set_color(0,0,255); break;
-      case 'y': set_color(255,255,0); break;
-      case 'm': set_color(255,0,255); break;
-      case 'c': set_color(0,255,255); break;
-      case 'w': set_color(255,255,255); break;
+      case 'E': set_color(255,50,180); break;
+      case 'a': set_color(255,0,0); break;
+      case 'c': set_color(255,40,40); break;
+      case 'e': set_color(255,85,30); break;
+      case 'w': set_color(255,255,0); break;
+      case 'n': set_color(15,100,255); break;
+      case 'i': set_color(40,255,70); break;
+      case 'd': set_color(100,255,100); break;
+      case 'o': set_color(100,100,100); break;
     }
   }
 }
@@ -171,8 +172,8 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
             Serial.printf("[WSc] get text: %s\n", payload);
             #endif
             str = (char*)payload;
+            // TODO: This can be surely be done better, like, get the first key looking at double quotes.
             if (str.substring(2,7).equals("color")) {
-              // TODO: This can be surely be done better ;-)
               uint8_t pos1, pos2;
               uint8_t r, g, b;
               pos1 = str.indexOf('[');

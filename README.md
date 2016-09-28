@@ -34,7 +34,7 @@ Where r,g and b are integer between 0 and 255.
 Install the [arduinoWebSockets](https://github.com/Links2004/arduinoWebSockets) library, download zip and use the arduino IDE `Sketch -> Include Library -> Add .ZIP Library`.
 Note: I renamed the installed directory in '~/Documents/Arduino/Libraries' to remove the -master, not sure this is needed.
 
-Install the [NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel), see project README.
+Install the [NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel) library, see project README.
 
 ## Tested hardware listing:
 
