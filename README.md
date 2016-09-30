@@ -1,7 +1,7 @@
 # Connected pins
 
 Connected pins, is an IOT project.
-This project control a NeoPixel led using ESP8266 Huzzah connected to a remote 3rd party websocket, the websocket simply send the RGB value of the led, that will in turn blink once with the value read.
+This project control an Adafruit NeoPixel led  using ESP8266 Huzzah connected to a remote 3rd party websocket, the websocket simply send the RGB value of the led, that will in turn blink once with the value read.
 
 ## Usage
 
@@ -49,8 +49,10 @@ Given the above result, the sketch will probably not try to put the board to sle
 
 ## Hardware connection
 
-Connect the led UP ARROW port to Huzzah PIN 12.
-  - Note: There are two _arrows pins_ on the led PCB, do not use the arrow going form the led to the pin, but the one from the pin to the led)
+Example for the mentionned hardware above (Huzzah Feather + Flora NeoPixel v2):
+
+Connect the led UP ARROW port to Huzzah Feather PIN 12.
+  - Note: There are two _arrows pins_ on the led PCB, do not use the arrow going form the led to the pin, but the one from the pin to the led.
   - Note: You can use any other GPIO ports on the board, but don't forget to change the PIN number in the sketch
 
 Connect the led (-) to Huzzah GND.

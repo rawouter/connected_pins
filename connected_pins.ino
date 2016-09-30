@@ -1,7 +1,6 @@
 #include <Arduino.h>
 
 #include <Adafruit_NeoPixel.h>
-#include <ESP8266WiFi.h>
 #include <math.h>
 
 #include <ESP8266WiFi.h>
@@ -88,10 +87,7 @@ void set_color(uint8_t r, uint8_t g, uint8_t b) {
  */
 void set_color(uint8_t c[3]) {
   #ifdef DEBUG
-  Serial.print("Setting color: ");
-  Serial.print(c[0]);
-  Serial.print(c[1]);
-  Serial.println(c[2]);
+  Serial.printf("Setting color: %i,%i,%i\n", c[0], c[1], c[2]);    
   #endif
 
   start_color_time = millis();
