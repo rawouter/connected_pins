@@ -2,7 +2,7 @@
 
 void set_color_from_json(char *json) {
   StaticJsonBuffer<200> jsonBuffer;
-  
+
   JsonObject& root = jsonBuffer.parseObject(json);
 
   if (!root.success())

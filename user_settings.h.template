@@ -1,0 +1,10 @@
+// WIFI
+#define WLAN_SSID "your SSID"
+#define WLAN_PASS "your PASS"
+
+// MQTT
+#define AIO_SERVER      "io.adafruit.com"
+#define AIO_SERVERPORT  8883
+#define AIO_USERNAME    "your aio username"
+#define AIO_KEY         "your aio key"
+#define AIO_FEED        "/feeds/your-feed"

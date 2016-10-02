@@ -1,6 +1,6 @@
-//////////////////////////////// 
+////////////////////////////////
 // NeoPixel
-//////////////////////////////// 
+////////////////////////////////
 
 #include <Adafruit_NeoPixel.h>
 #include <math.h>
@@ -28,17 +28,17 @@ void display_leds() {
 }
 
 void set_color(uint8_t r, uint8_t g, uint8_t b) {
-  uint8_t c[] = {r,g,b};
+  uint8_t c[] = {r, g, b};
   set_color(c);
 }
 
 /*
- * Record the start time and the new color to reach
- */
+   Record the start time and the new color to reach
+*/
 void set_color(uint8_t c[3]) {
-  #ifdef DEBUG
-  serprintf("Setting color: %i,%i,%i\n", c[0], c[1], c[2]);    
-  #endif
+#ifdef DEBUG
+  serprintf("Setting color: %i,%i,%i\n", c[0], c[1], c[2]);
+#endif
 
   start_color_time = millis();
   current_color[0] = c[0];
@@ -47,21 +47,21 @@ void set_color(uint8_t c[3]) {
 }
 
 void draw_pixels() {
-  uint8_t c[3] = {0,0,0};
+  uint8_t c[3] = {0, 0, 0};
   uint8_t brightness = (uint8_t)get_brightness();
 
   c[0] = map(current_color[0], 0, 255, 0, brightness);
   c[1] = map(current_color[1], 0, 255, 0, brightness);
   c[2] = map(current_color[2], 0, 255, 0, brightness);
 
-  #ifdef DEBUG
+#ifdef DEBUG
   if (brightness > 0) {
     serprintf("Brightness: %i\n", brightness);
-    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);    
+    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);
   }
-  #endif
+#endif
 
-  for(uint16_t i=0; i < strip.numPixels(); i++) {
+  for (uint16_t i = 0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c[0], c[1], c[2]);
   }
 }
@@ -73,10 +73,11 @@ uint8_t get_brightness() {
     digitalWrite(0, HIGH);
     brightness = 0;
   } else {
-    digitalWrite(0, HIGH*0.8);
+    digitalWrite(0, HIGH * 0.8);
     //brightness = (uint8_t)abs(sin(now*PI/BLINK_TIME*FREQ) * 255);
-    brightness = (uint8_t)((exp(sin((now*2*PI/BLINK_TIME*FREQ)-PI/2.0)) - 0.36787944)*108.0);
+    brightness = (uint8_t)((exp(sin((now * 2 * PI / BLINK_TIME * FREQ) - PI / 2.0)) - 0.36787944) * 108.0);
   }
   return brightness;
 }
+
 

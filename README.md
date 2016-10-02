@@ -37,6 +37,8 @@ Install the [JSON](https://github.com/bblanchon/ArduinoJson/wiki/Using%20the%20l
 
 For Bluetooth LE, install the [BLE](https://learn.adafruit.com/adafruit-feather-32u4-bluefruit-le/installing-ble-library) library.
 
+If using WIFI with MQTT, you need the [MQTT library](https://learn.adafruit.com/mqtt-adafruit-io-and-you/help?view=all)
+
 ## Tested hardware listing:
 
 - [Huzzah Feather](http://www.exp-tech.de/en/adafruit-feather-huzzah-with-esp8266-wifi?___from_store=de) for WIFI mode

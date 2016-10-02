@@ -1,7 +1,7 @@
-//////////////////////////////// 
+////////
 // BLE
-//////////////////////////////// 
-#ifdef MODE_BLE
+////////
+#ifdef USE_BLE
 
 #include <SPI.h>
 #include "Adafruit_BLE.h"
@@ -34,7 +34,7 @@ void setup_ble(void)
   {
     /* Perform a factory reset to make sure everything is in a known state */
     Serial.println(F("Performing a factory reset: "));
-    if ( ! ble.factoryReset() ){
+    if ( ! ble.factoryReset() ) {
       error(F("Couldn't factory reset"));
     }
   }
@@ -54,7 +54,7 @@ void setup_ble(void)
 
   /* Wait for connection */
   while (! ble.isConnected()) {
-      delay(500);
+    delay(500);
   }
 
   // LED Activity command is only supported from 0.6.6
@@ -68,7 +68,7 @@ void setup_ble(void)
 
 // if string received, return true and copy the string to the buffer
 // if no string received, return false
-bool read_string_from_ble(char *buf) {
+bool read_string_from_ble(char *buf, int size) {
   // Check for incoming characters from Bluefruit
   ble.println("AT+BLEUARTRX");
   ble.readline();
@@ -77,7 +77,8 @@ bool read_string_from_ble(char *buf) {
     return false;
   }
   // Some data was found, its in the buffer
-  strcpy(buf, ble.buffer);
+  strncpy(buf, ble.buffer, size - 1);
+  buf[size] = '\0';
   ble.waitForOK();
   return true;
 }

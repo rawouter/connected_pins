@@ -1,3 +1,5 @@
+#ifdef USE_BLE
+
 // COMMON SETTINGS
 // ----------------------------------------------------------------------------------------------
 // These settings are used in both SW UART, HW UART and SPI mode
@@ -23,7 +25,7 @@
 // this line if you are connecting the BLE to Leonardo/Micro or Flora
 // ----------------------------------------------------------------------------------------------
 #ifdef Serial1    // this makes it not complain on compilation if there's no Serial1
-  #define BLUEFRUIT_HWSERIAL_NAME      Serial1
+#define BLUEFRUIT_HWSERIAL_NAME      Serial1
 #endif
 
 
@@ -54,3 +56,5 @@
 #define BLUEFRUIT_SPI_SCK              13
 #define BLUEFRUIT_SPI_MISO             12
 #define BLUEFRUIT_SPI_MOSI             11
+
+#endif
