@@ -1,6 +1,8 @@
 #include <ArduinoJson.h>
 
 void set_color_from_json(char *json) {
+  debug(json);
+  
   StaticJsonBuffer<200> jsonBuffer;
 
   JsonObject& root = jsonBuffer.parseObject(json);
