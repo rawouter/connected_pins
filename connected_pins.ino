@@ -9,15 +9,15 @@
 #include <Hash.h>
 
 //#define DEBUG
-//#define MODE_SERIAL
+#define MODE_SERIAL
 #define MODE_CONNECTED
 
-#define SSID "xxx"
-#define SSIDPASS "xxx"
+#define SSID "xxxx"
+#define SSIDPASS "xxxx"
 #define SSOCKETURL "shrouded-bayou-62366.herokuapp.com"
 
 #define FREQ 1             // Number of blink(s) during BLINK_TIME
-#define BLINK_TIME 1       // Total ligthning time per color message (seconds)
+#define BLINK_TIME 2       // Total ligthning time per color message (seconds)
 #define MAXBRIGHTNESS 255  // 0 to 255, overall brigthness of the leds
 #define PIN 12             // Pin number of the NeoPixel bus
 #define NUM_PIX 1          // Number of NoePixel leds
@@ -37,8 +37,10 @@ void setup() {
   pinMode(2, OUTPUT); digitalWrite(2, HIGH);
 
   #ifdef MODE_CONNECTED
+  #ifdef DEBUG
   Serial.setDebugOutput(true);  // Will print WIFI debugs
   Serial.println();
+  #endif
 
   for(uint8_t t = 4; t > 0; t--) {
     Serial.printf("[SETUP] BOOT WAIT %d...\n", t);
@@ -72,6 +74,21 @@ void loop() {
   webSocket.loop();
   #endif
 
+  // Connection check
+  // Red led = WebSocket connected
+  //if (webSocket.clientIsConnected(*webSocket)==true) {
+  //  digitalWrite(0, LOW);
+  //}
+  //digitalWrite(0, HIGH);
+
+  // Blue led = WIFI connected
+  #ifdef MODE_CONNECTED
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(2, LOW);
+  }
+  digitalWrite(2, HIGH);
+  #endif
+
   // Redraw pixels
   draw_pixels();
   strip.show();
@@ -103,13 +120,6 @@ void draw_pixels() {
   c[0] = map(current_color[0], 0, 255, 0, brightness);
   c[1] = map(current_color[1], 0, 255, 0, brightness);
   c[2] = map(current_color[2], 0, 255, 0, brightness);
-
-  #ifdef DEBUG
-  if (brightness > 0) {
-    Serial.printf("Brightness: %i\n", brightness);
-    Serial.printf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);    
-  }
-  #endif
 
   for(uint16_t i=0; i < strip.numPixels(); i++) {
     strip.setPixelColor(i, c[0], c[1], c[2]);
@@ -152,7 +162,6 @@ void set_color_from_serial() {
 #ifdef MODE_CONNECTED
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
     String str;
-    digitalWrite(2, HIGH*0.8);
     switch(type) {
         case WStype_DISCONNECTED:
             Serial.printf("[WSc] Disconnected!\n");
@@ -191,6 +200,5 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
             hexdump(payload, length);
             break;
     }
-    digitalWrite(2, HIGH);
 }
 #endif
