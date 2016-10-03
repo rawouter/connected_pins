@@ -6,7 +6,7 @@
 #include <math.h>
 
 #define FREQ 1             // Number of blink(s) during BLINK_TIME
-#define BLINK_TIME 1       // Total ligthning time per color message (seconds)
+#define BLINK_TIME 2       // Total ligthning time per color message (seconds)
 #define MAXBRIGHTNESS 255  // 0 to 255, overall brigthness of the leds
 #define PIN 12             // Pin number of the NeoPixel bus
 #define NUM_PIX 1          // Number of NoePixel leds
