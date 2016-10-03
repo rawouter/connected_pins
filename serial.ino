@@ -32,7 +32,7 @@ void set_color_from_char(char c) {
     case 'd': set_color(100, 255, 100); break;
     case 'o': set_color(100, 100, 100); break;
     default:
-      serprintf("set_color_from_char: unknown char %s\n", c);
+      Serial.println("set_color_from_char: unknown char");
       break;
   }
 }

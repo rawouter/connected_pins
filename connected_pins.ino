@@ -60,7 +60,6 @@ void loop() {
 #endif
 
   display_leds();
-  delay(100);
 }
 
 void debug(char *buf) {
