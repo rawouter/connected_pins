@@ -42,7 +42,7 @@ void loop() {
     debug(buf);
     set_color_from_json(buf);
   }
-  mqtt_keepalive();
+  //mqtt_keepalive();
 #endif
 
 #ifdef USE_BLE

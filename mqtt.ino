@@ -33,7 +33,7 @@ void setup_mqtt() {
 // if no string received, return false
 bool read_string_from_mqtt(char *buf, int size) {
   Adafruit_MQTT_Subscribe *subscription;
-  while ((subscription = mqtt.readSubscription(1000))) {
+  while ((subscription = mqtt.readSubscription(0))) {
     if (subscription == &color_feed) {
       strncpy(buf, (char *)color_feed.lastread, size - 1);
       buf[size] = '\0';
