@@ -55,10 +55,10 @@ void draw_pixels() {
   c[2] = map(current_color[2], 0, 255, 0, brightness);
 
 #ifdef DEBUG
-  if (brightness > 0) {
-    serprintf("Brightness: %i\n", brightness);
-    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);
-  }
+//  if (brightness > 0) {
+//    serprintf("Brightness: %i\n", brightness);
+//    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);
+//  }
 #endif
 
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
