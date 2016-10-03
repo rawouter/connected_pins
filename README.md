@@ -37,7 +37,7 @@ Install the [JSON](https://github.com/bblanchon/ArduinoJson/wiki/Using%20the%20l
 
 For Bluetooth LE, install the [BLE](https://learn.adafruit.com/adafruit-feather-32u4-bluefruit-le/installing-ble-library) library.
 
-If using WIFI with MQTT, you need the [MQTT library](https://learn.adafruit.com/mqtt-adafruit-io-and-you/help?view=all)
+If using WIFI with MQTT, you need the [MQTT library](https://github.com/sgrimee/Adafruit_MQTT_Library). Be sure to use this clone as it includes a small but important change in packet size.
 
 If using WIFI you need the [WifiManager library](https://github.com/tzapu/WiFiManager) 
 

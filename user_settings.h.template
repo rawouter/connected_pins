@@ -7,4 +7,4 @@
 #define AIO_SERVERPORT  8883
 #define AIO_USERNAME    "your aio username"
 #define AIO_KEY         "your aio key"
-#define AIO_FEED        "/feeds/your-feed"
+#define AIO_FEED        "/f/your-feed"

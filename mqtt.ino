@@ -10,10 +10,6 @@
 // configure your settings here:
 #include "user_settings.h"
 
-// how much data we save in a subscription object
-// our feed is capped to 64 bytes at the moment
-#define SUBSCRIPTIONDATALEN 64
-
 const char MQTT_SERVER[] PROGMEM    = AIO_SERVER;
 const char MQTT_USERNAME[] PROGMEM  = AIO_USERNAME;
 const char MQTT_PASSWORD[] PROGMEM  = AIO_KEY;
