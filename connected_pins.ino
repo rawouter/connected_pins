@@ -41,7 +41,6 @@ void loop() {
   if (read_string_from_mqtt(buf, BUF_SIZE)) {
     debug(buf);
     set_color_from_json(buf);
-    display_leds();
   }
   mqtt_keepalive();
 #endif
@@ -50,7 +49,6 @@ void loop() {
   if (read_string_from_ble(buf, BUF_SIZE)) {
     debug(buf);
     set_color_from_json(buf);
-    display_leds();
   }
 #endif
 
@@ -58,10 +56,10 @@ void loop() {
   if (Serial.available() > 0) {
     char c = Serial.read();
     set_color_from_char(c);
-    display_leds();
   }
 #endif
 
+  display_leds();
   delay(100);
 }
 
