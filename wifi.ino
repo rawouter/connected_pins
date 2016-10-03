@@ -11,23 +11,33 @@
 #include <ESP8266WebServer.h>   //Local WebServer used to serve the configuration portal
 #include <WiFiManager.h>        //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
-// Configure your settings here:
-#include "user_settings.h"
+//for LED status
+#include <Ticker.h>
+Ticker ticker;
+
+#define WIFI_LED 2
 
 char mqtt_server[40] = AIO_SERVER;
 char mqtt_port[6] = "8883";
 
+void tick() {
+  int state = digitalRead(WIFI_LED);  // get the current state of GPIO1 pin
+  digitalWrite(WIFI_LED, !state);     // set pin to the opposite state
+}
+
 void set_wifi_led() {
   // blue led when wifi is on
   if (WiFi.status() == WL_CONNECTED) {
-    digitalWrite(2, LOW);
+    digitalWrite(WIFI_LED, LOW);
   }
-  digitalWrite(2, HIGH);
+  digitalWrite(WIFI_LED, HIGH);
 }
 
 void setup_wifi() {
-  // blue led shows wifi status
-  pinMode(2, OUTPUT); digitalWrite(2, HIGH);
+  pinMode(WIFI_LED, OUTPUT);
+  // Start at 0.6 because we start in AP mode and try to connect
+  ticker.attach(0.6, tick);
+
 
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
   WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
@@ -55,6 +65,7 @@ void setup_wifi() {
   Serial.println("IP address: "); Serial.println(WiFi.localIP());
   Serial.print("MQTT Server: "); Serial.println(mqtt_server);
   Serial.print("MQTT Port: "); Serial.println(mqtt_port);
+  ticker.detach();
 }
 
 #endif

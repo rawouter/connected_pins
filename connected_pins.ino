@@ -41,11 +41,6 @@ void setup() {
 
 
 void loop() {
-
-#ifdef USE_WIFI
-  set_wifi_led();
-#endif
-
 #ifdef USE_MQTT
   MQTT_connect();
   if (read_string_from_mqtt(buf, BUF_SIZE)) {
@@ -69,6 +64,10 @@ void loop() {
     char c = Serial.read();
     set_color_from_char(c);
   }
+#endif
+
+#ifdef USE_WIFI
+  set_wifi_led();
 #endif
 
   display_leds();
