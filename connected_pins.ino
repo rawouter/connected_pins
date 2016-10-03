@@ -3,8 +3,8 @@
 // If using WIFI/MQTT copy user_settings.h.template to user_settings.h and adjust it
 
 // Where to get color commands from
-// SERIAL can be enabled together with BLE or WIFI
-// WIFI can be used with MQTT or WEBSOCKET (todo)
+// SERIAL can be enabled together with BLE or WIFI (depending on platform)
+// WIFI can be used with MQTT or WEBSOCKET (not both)
 
 //#define USE_BLE
 #define USE_WIFI
@@ -39,7 +39,12 @@ void setup() {
   setup_neopixel();
 }
 
+
 void loop() {
+
+#ifdef USE_WIFI
+  set_wifi_led();
+#endif
 
 #ifdef USE_MQTT
   MQTT_connect();

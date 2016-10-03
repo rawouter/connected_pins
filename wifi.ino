@@ -17,7 +17,18 @@
 char mqtt_server[40] = AIO_SERVER;
 char mqtt_port[6] = "8883";
 
+void set_wifi_led() {
+  // blue led when wifi is on
+  if (WiFi.status() == WL_CONNECTED) {
+    digitalWrite(2, LOW);
+  }
+  digitalWrite(2, HIGH);
+}
+
 void setup_wifi() {
+  // blue led shows wifi status
+  pinMode(2, OUTPUT); digitalWrite(2, HIGH);
+
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
   WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
   WiFiManager wifiManager;
@@ -25,7 +36,6 @@ void setup_wifi() {
 
   wifiManager.addParameter(&custom_mqtt_server);
   wifiManager.addParameter(&custom_mqtt_port);
-
 
   //reset settings - for testing
   //wifiManager.resetSettings();

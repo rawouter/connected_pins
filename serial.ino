@@ -15,8 +15,6 @@ void setup_serial() {
   delay(500);
 
   Serial.begin(115200);
-  pinMode(0, OUTPUT); digitalWrite(0, HIGH);
-  pinMode(2, OUTPUT); digitalWrite(2, HIGH);
   Serial.println("Alive");
 }
 

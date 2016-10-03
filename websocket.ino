@@ -23,7 +23,6 @@ void check_websocket() {
 }
 
 void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
-  digitalWrite(2, HIGH * 0.8);
   switch (type) {
     case WStype_DISCONNECTED:
       serprintf("[WSc] Disconnected!\n");
@@ -44,7 +43,6 @@ void webSocketEvent(WStype_t type, uint8_t * payload, size_t length) {
       hexdump(payload, length);
       break;
   }
-  digitalWrite(2, HIGH);
 }
 
 #endif

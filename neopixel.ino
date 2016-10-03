@@ -16,6 +16,9 @@ uint8_t current_color[] = {0, 0, 255};
 unsigned long start_color_time = 0;
 
 void setup_neopixel() {
+  // red led shows strip activity
+  pinMode(0, OUTPUT); digitalWrite(0, HIGH);
+
   strip.begin();
   strip.setBrightness(MAXBRIGHTNESS);
   set_color(current_color);
