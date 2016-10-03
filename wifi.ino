@@ -28,7 +28,7 @@ void setup_wifi() {
 
 
   //reset settings - for testing
-  wifiManager.resetSettings();
+  //wifiManager.resetSettings();
 
   if (!wifiManager.autoConnect()) {
     Serial.println("failed to connect and hit timeout");
