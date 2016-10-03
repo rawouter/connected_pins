@@ -8,8 +8,8 @@
 
 //#define USE_BLE
 #define USE_WIFI
-//#define USE_MQTT
-#define USE_WEBSOCKET
+#define USE_MQTT
+//#define USE_WEBSOCKET
 #define USE_SERIAL
 
 #define DEBUG
@@ -46,8 +46,6 @@ void loop() {
   if (read_string_from_mqtt(buf, BUF_SIZE)) {
     set_color_from_json(buf);
   }
-  // TODO: re-enable keepalives but much less often, e.g. once per minute
-  //mqtt_keepalive();
 #endif
 
 #ifdef USE_BLE
