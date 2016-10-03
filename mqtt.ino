@@ -20,6 +20,23 @@ WiFiClientSecure client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
 
 Adafruit_MQTT_Subscribe color_feed = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME AIO_FEED);
+Adafruit_MQTT_Publish batt_level = Adafruit_MQTT_Publish(&mqtt, AIO_USERNAME "/f/battery");
+
+long lastPublish = 0;
+
+void publish_batt_level() {
+#ifdef ESP8266
+  long now = millis();
+  if (now - lastPublish > 60000) {
+    lastPublish = now;
+    if (! batt_level.publish(get_vcc())) {
+      Serial.println(F("Failed to publish battery level."));
+    }
+  }
+#else
+  Serial.println("publish_batt_level() is not implemented on this platform");
+#endif
+}
 
 void setup_mqtt() {
   mqtt.subscribe(&color_feed);
@@ -39,12 +56,6 @@ bool read_string_from_mqtt(char *buf, int size) {
     return false;
   }
   return false;
-}
-
-void mqtt_keepalive() {
-  if(! mqtt.ping()) {
-    mqtt.disconnect();
-  }
 }
 
 // Function to connect and reconnect as necessary to the MQTT server.

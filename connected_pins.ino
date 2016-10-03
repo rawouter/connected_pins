@@ -51,6 +51,7 @@ void loop() {
   if (read_string_from_mqtt(buf, BUF_SIZE)) {
     set_color_from_json(buf);
   }
+  publish_batt_level();
 #endif
 
 #ifdef USE_BLE
