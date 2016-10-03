@@ -31,14 +31,20 @@ Where r,g and b are integer between 0 and 255.
 
 ## Dependencies
 
-Install the [arduinoWebSockets](https://github.com/Links2004/arduinoWebSockets) library, download zip and use the arduino IDE `Sketch -> Include Library -> Add .ZIP Library`.
-Note: I renamed the installed directory in '~/Documents/Arduino/Libraries' to remove the -master, not sure this is needed.
-
 Install the [NeoPixel](https://github.com/adafruit/Adafruit_NeoPixel) library, see project README.
+
+Install the [JSON](https://github.com/bblanchon/ArduinoJson/wiki/Using%20the%20library%20with%20Arduino) library.
+
+For Bluetooth LE, install the [BLE](https://learn.adafruit.com/adafruit-feather-32u4-bluefruit-le/installing-ble-library) library.
+
+If using WIFI with MQTT, you need the [MQTT library](https://github.com/sgrimee/Adafruit_MQTT_Library). Be sure to use this clone as it includes a small but important change in packet size.
+
+If using WIFI you need the [WifiManager library](https://github.com/tzapu/WiFiManager) 
 
 ## Tested hardware listing:
 
-- [Huzzah Feather](http://www.exp-tech.de/en/adafruit-feather-huzzah-with-esp8266-wifi?___from_store=de)
+- [Huzzah Feather](http://www.exp-tech.de/en/adafruit-feather-huzzah-with-esp8266-wifi?___from_store=de) for WIFI mode
+- [Feather M0 BLE](https://learn.adafruit.com/adafruit-feather-m0-bluefruit-le/pinouts?view=all) for Bluetooth LE mode with the [Bluefruit iOS app](https://learn.adafruit.com/bluefruit-le-connect-for-ios/library-and-config?view=all) in MQTT bridge mode
 - [Lipo 1000mAh](http://www.exp-tech.de/en/polymer-lithium-ion-battery-1000mah)
 - [Adafruit NeoPixel](http://www.exp-tech.de/adafruit-flora-rgb-smart-neo-pixel-version-2-pack-of-4)
 
@@ -64,4 +70,9 @@ Connect the led (+) to Huzzah VCC (see below note for Huzzah Feather)
   - As written above, if you use your other esp8266 with your own power regulator, the direct power from a 1S LIPO gives good results with the Adaftruit Neopixel
 
 ![Connect led to pin 12](https://github.com/rawouter/connected_pins/blob/master/schema/wiring.png)
+
+# MQTT bridge over bluetooth LE
+
+curl -H "X-AIO-Key: myadafruitsecretkey" -H 'Content-Type: application/json' -X POST --data '{"value": {"color":[111,252,0]} }' "https://io.adafruit.com/api/feeds/borg-event-json/data.json"
+
 
