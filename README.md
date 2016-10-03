@@ -39,6 +39,8 @@ For Bluetooth LE, install the [BLE](https://learn.adafruit.com/adafruit-feather-
 
 If using WIFI with MQTT, you need the [MQTT library](https://learn.adafruit.com/mqtt-adafruit-io-and-you/help?view=all)
 
+If using WIFI you need the [WifiManager library](https://github.com/tzapu/WiFiManager) 
+
 ## Tested hardware listing:
 
 - [Huzzah Feather](http://www.exp-tech.de/en/adafruit-feather-huzzah-with-esp8266-wifi?___from_store=de) for WIFI mode

@@ -4,29 +4,47 @@
 #ifdef USE_WIFI
 
 #include <ESP8266WiFi.h>
-#include <ESP8266WiFiMulti.h>
 #include <WebSocketsClient.h>
 #include <Hash.h>
+
+#include <DNSServer.h>          //Local DNS Server used for redirecting all requests to the configuration portal
+#include <ESP8266WebServer.h>   //Local WebServer used to serve the configuration portal
+#include <WiFiManager.h>        //https://github.com/tzapu/WiFiManager WiFi Configuration Magic
 
 // Configure your settings here:
 #include "user_settings.h"
 
-ESP8266WiFiMulti WiFiMulti;
+char mqtt_server[40] = AIO_SERVER;
+char mqtt_port[6] = "8883";
 
 void setup_wifi() {
-  Serial.println();
-  Serial.print("Connecting to ");
-  Serial.println(WLAN_SSID);
+  WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
+  WiFiManagerParameter custom_mqtt_port("port", "mqtt port", mqtt_port, 6);
+  WiFiManager wifiManager;
+  //wifiManager.setSaveConfigCallback(saveConfigCallback);
 
-  WiFi.begin(WLAN_SSID, WLAN_PASS);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
+  wifiManager.addParameter(&custom_mqtt_server);
+  wifiManager.addParameter(&custom_mqtt_port);
+
+
+  //reset settings - for testing
+  wifiManager.resetSettings();
+
+  if (!wifiManager.autoConnect()) {
+    Serial.println("failed to connect and hit timeout");
+    //reset and try again, or maybe put it to deep sleep
+    ESP.reset();
+    delay(1000);
   }
-  Serial.println();
+
+  //read updated parameters
+  strcpy(mqtt_server, custom_mqtt_server.getValue());
+  strcpy(mqtt_port, custom_mqtt_port.getValue());
 
   Serial.println("WiFi connected");
   Serial.println("IP address: "); Serial.println(WiFi.localIP());
+  Serial.print("MQTT Server: "); Serial.println(mqtt_server);
+  Serial.print("MQTT Port: "); Serial.println(mqtt_port);
 }
 
 #endif
