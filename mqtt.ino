@@ -7,6 +7,9 @@
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
 
+#include <Ticker.h>
+Ticker mqttticker;
+
 // configure your settings here:
 #include "user_settings.h"
 
@@ -26,12 +29,9 @@ long lastPublish = 0;
 
 void publish_batt_level() {
 #ifdef ESP8266
-  long now = millis();
-  if (now - lastPublish > 60000) {
-    lastPublish = now;
-    if (! batt_level.publish(get_vcc())) {
-      Serial.println(F("Failed to publish battery level."));
-    }
+  float bl = get_vcc();
+  if (! batt_level.publish(bl)) {
+    Serial.println(F("Failed to publish battery level."));
   }
 #else
   Serial.println("publish_batt_level() is not implemented on this platform");
@@ -67,7 +67,7 @@ void MQTT_connect() {
   if (mqtt.connected()) {
     return;
   }
-
+  mqttticker.detach();
   Serial.print("Connecting to MQTT... ");
 
   while ((ret = mqtt.connect()) != 0) { // connect will return 0 for connected
@@ -77,6 +77,7 @@ void MQTT_connect() {
     delay(5000);  // wait 5 seconds
   }
   Serial.println("MQTT Connected!");
+  mqttticker.attach(60, publish_batt_level);
 }
 
 #endif

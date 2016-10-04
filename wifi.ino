@@ -13,7 +13,7 @@
 
 //for LED status
 #include <Ticker.h>
-Ticker ticker;
+Ticker wifiticker;
 
 #define WIFI_LED 2
 
@@ -36,7 +36,7 @@ void set_wifi_led() {
 void setup_wifi() {
   pinMode(WIFI_LED, OUTPUT);
   // Start at 0.6 because we start in AP mode and try to connect
-  ticker.attach(0.6, tick);
+  wifiticker.attach(0.6, tick);
 
 
   WiFiManagerParameter custom_mqtt_server("server", "mqtt server", mqtt_server, 40);
@@ -65,7 +65,7 @@ void setup_wifi() {
   Serial.println("IP address: "); Serial.println(WiFi.localIP());
   Serial.print("MQTT Server: "); Serial.println(mqtt_server);
   Serial.print("MQTT Port: "); Serial.println(mqtt_port);
-  ticker.detach();
+  wifiticker.detach();
 }
 
 #endif
