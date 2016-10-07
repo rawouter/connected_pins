@@ -17,6 +17,9 @@ Ticker wifiticker;
 
 #define WIFI_LED 2
 
+#ifndef USE_MQTT
+#define AIO_SERVER "foo"
+#endif
 char mqtt_server[40] = AIO_SERVER;
 char mqtt_port[6] = "8883";
 
