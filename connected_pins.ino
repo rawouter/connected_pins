@@ -6,9 +6,9 @@
 // SERIAL can be enabled together with BLE or WIFI (depending on platform)
 // WIFI can be used with MQTT or WEBSOCKET (not both)
 
-//#define USE_BLE
-#define USE_WIFI
-#define USE_MQTT
+#define USE_BLE
+//#define USE_WIFI
+//#define USE_MQTT
 //#define USE_WEBSOCKET
 #define USE_SERIAL
 

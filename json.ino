@@ -13,9 +13,9 @@ void set_color_from_json(char *json) {
     return;
   }
 
-  int red   = root["color"][0];
-  int green = root["color"][1];
-  int blue  = root["color"][2];
+  int red   = root["c"][0];
+  int green = root["c"][1];
+  int blue  = root["c"][2];
 
   set_color(red, green, blue);
 }
