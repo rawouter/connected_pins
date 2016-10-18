@@ -11,7 +11,12 @@
 #define PIN 12             // Pin number of the NeoPixel bus
 #define NUM_PIX 1          // Number of NoePixel leds
 
+#ifdef USE_GRB
 Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIX, PIN, NEO_GRB + NEO_KHZ800);
+#endif
+#ifdef USE_RGBW
+Adafruit_NeoPixel strip = Adafruit_NeoPixel(NUM_PIX, PIN, NEO_GRBW + NEO_KHZ800);
+#endif
 uint8_t current_color[] = {0, 0, 255};
 unsigned long start_color_time = 0;
 
@@ -57,15 +62,15 @@ void draw_pixels() {
   c[1] = map(current_color[1], 0, 255, 0, brightness);
   c[2] = map(current_color[2], 0, 255, 0, brightness);
 
-#ifdef DEBUG
-//  if (brightness > 0) {
-//    serprintf("Brightness: %i\n", brightness);
-//    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);
-//  }
+#ifdef DDDDEBUG
+  if (brightness > 0) {
+    serprintf("Brightness: %i\n", brightness);
+    serprintf("Resulting color: %i,%i,%i\n", c[0], c[1], c[2]);
+  }
 #endif
 
   for (uint16_t i = 0; i < strip.numPixels(); i++) {
-    strip.setPixelColor(i, c[0], c[1], c[2]);
+    strip.setPixelColor(i, strip.Color(c[0], c[1], c[2]));
   }
 }
 

@@ -11,6 +11,8 @@
 //#define USE_MQTT
 //#define USE_WEBSOCKET
 #define USE_SERIAL
+//#define USE_RGB
+#define USE_RGBW
 
 #define DEBUG
 
